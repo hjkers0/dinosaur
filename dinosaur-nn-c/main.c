@@ -106,15 +106,6 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-		if (GetRandomValue(0, 100) < 3)
-		{
-			int idx = GetRandomValue(0, p.size - 1);
-			if (p.circles[idx].onGround)
-			{
-				c_jump(&p.circles[idx]);
-				p.circles[idx].onGround = 0;
-			}
-		}
 		p_update(&p, floor);
 
         BeginDrawing();

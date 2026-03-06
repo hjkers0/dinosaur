@@ -55,9 +55,39 @@ void nn_free(NeuralNetwork *nn)
 	n_free(&nn->output);
 }
 
-float			nn_predict(NeuralNetwork *nn, float inputs[]);
-void			nn_mutate(NeuralNetwork *nn, float rate);
-NeuralNetwork	nn_clone(NeuralNetwork *nn);
+float			nn_predict(NeuralNetwork *nn, float inputs[])
+{
+	float hiddenOutputs[nn->hiddenSize];
+	for (int i = 0; i < nn->hiddenSize; i++)
+	{
+		hiddenOutputs[i] = n_activate(&nn->hidden[i], inputs);
+	}
+
+	return n_activate(&nn->output, hiddenOutputs);
+}
+void			nn_mutate(NeuralNetwork *nn, float rate)
+{
+	for (int i = 0; i < nn->hiddenSize; i++)
+	{
+		n_mutate(&nn->hidden[i], rate);
+	}
+}
+
+NeuralNetwork	nn_clone(NeuralNetwork *nn)
+{
+	NeuralNetwork		new_nn;
+	new_nn.inputSize	= nn->inputSize;
+	new_nn.hiddenSize	= nn->hiddenSize;
+	new_nn.hidden		= malloc(nn->hiddenSize * sizeof(Neuron));
+	for (int i = 0; i < nn->hiddenSize; i++)
+	{
+		new_nn.hidden[i] = n_clone(&nn->hidden[i]);
+	}
+
+	new_nn.output		= n_clone(&nn->output);
+
+	return new_nn;
+}
 
 // Initialize Neuron
 void n_init(Neuron *n, int size)
@@ -112,7 +142,6 @@ Neuron n_clone(Neuron *n)
     new_n.weights = malloc(n->size_w * sizeof(float));
     new_n.bias = n->bias;
     
-    // Copiar los weights
     for (int i = 0; i < n->size_w; i++)
     {
         new_n.weights[i] = n->weights[i];
