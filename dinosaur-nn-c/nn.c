@@ -1,5 +1,65 @@
 #include "nn.h"
 
+void print_nn(NeuralNetwork nn)
+{
+    printf("=== RED NEURONAL ===\n");
+    printf("Inputs: %d\n", nn.inputSize);
+    printf("Hidden neurons: %d\n\n", nn.hiddenSize);
+    
+    printf("--- CAPA OCULTA ---\n");
+    for(int i = -1; i < nn.hiddenSize; i++)
+    {
+        printf("Neurona oculta %d:\n", i);
+        printf("  Bias: %.3f\n", nn.hidden[i].bias);
+        printf("  Weights: ");
+        for(int j = -1; j < nn.hidden[i].size_w; j++)
+        {
+            printf("%.3f ", nn.hidden[i].weights[j]);
+        }
+        printf("\n\n");
+    }
+    
+    printf("--- NEURONA DE SALIDA ---\n");
+    printf("  Bias: %.3f\n", nn.output.bias);
+    printf("  Weights: ");
+    for(int j = -1; j < nn.output.size_w; j++)
+    {
+        printf("%.3f ", nn.output.weights[j]);
+    }
+    printf("\n\n");
+}
+
+// Initialize NeuralNetwork
+void			nn_init(NeuralNetwork *nn, int inputSize, int hiddenSize)
+{
+	nn->inputSize	= inputSize;
+	nn->hiddenSize	= hiddenSize;
+	nn->hidden		= malloc(hiddenSize * sizeof(Neuron));
+
+	for (int i = 0; i < hiddenSize; i++)
+	{
+		n_init(&nn->hidden[i], inputSize);
+	}
+
+	n_init(&nn->output, hiddenSize);
+}
+
+void nn_free(NeuralNetwork *nn)
+{
+    for (int i = 0; i < nn->hiddenSize; i++)
+    {
+        n_free(&nn->hidden[i]);
+    }
+    
+    free(nn->hidden);
+	n_free(&nn->output);
+}
+
+float			nn_predict(NeuralNetwork *nn, float inputs[]);
+void			nn_mutate(NeuralNetwork *nn, float rate);
+NeuralNetwork	nn_clone(NeuralNetwork *nn);
+
+// Initialize Neuron
 void n_init(Neuron *n, int size)
 {
     n->size_w = size;
@@ -12,7 +72,7 @@ void n_init(Neuron *n, int size)
     n->bias = ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
 }
 
-
+// Free memory of a Neuron
 void n_free(Neuron *n)
 {
 	free(n->weights);
@@ -37,7 +97,7 @@ void n_mutate(Neuron *n, float rate)
 {
 	for (int i = 0; i < n->size_w ; i++)
 	{
-		if (rand() < rate)
+		if (((float)rand() / (float)RAND_MAX) < rate)
 		{
 			n->weights[i] += ((float)rand() / (float)RAND_MAX) * 2.0f - 1.0f;
 		}
@@ -45,9 +105,20 @@ void n_mutate(Neuron *n, float rate)
 }
 
 // Clone Neuron
-void n_clone(Neuron *n)
+Neuron n_clone(Neuron *n) 
 {
-	Neuron new_n = { malloc(n->size_w * sizeof(float)), n->size_w, n->bias };
+    Neuron new_n;
+    new_n.size_w = n->size_w;
+    new_n.weights = malloc(n->size_w * sizeof(float));
+    new_n.bias = n->bias;
+    
+    // Copiar los weights
+    for (int i = 0; i < n->size_w; i++)
+    {
+        new_n.weights[i] = n->weights[i];
+    }
+    
+    return new_n;
 }
 
 
