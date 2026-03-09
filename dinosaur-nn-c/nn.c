@@ -7,12 +7,12 @@ void print_nn(NeuralNetwork nn)
     printf("Hidden neurons: %d\n\n", nn.hiddenSize);
     
     printf("--- CAPA OCULTA ---\n");
-    for(int i = -1; i < nn.hiddenSize; i++)
+    for(int i = 0; i < nn.hiddenSize; i++)
     {
         printf("Neurona oculta %d:\n", i);
         printf("  Bias: %.3f\n", nn.hidden[i].bias);
         printf("  Weights: ");
-        for(int j = -1; j < nn.hidden[i].size_w; j++)
+        for(int j = 0; j < nn.hidden[i].size_w; j++)
         {
             printf("%.3f ", nn.hidden[i].weights[j]);
         }
@@ -22,7 +22,7 @@ void print_nn(NeuralNetwork nn)
     printf("--- NEURONA DE SALIDA ---\n");
     printf("  Bias: %.3f\n", nn.output.bias);
     printf("  Weights: ");
-    for(int j = -1; j < nn.output.size_w; j++)
+    for(int j = 0; j < nn.output.size_w; j++)
     {
         printf("%.3f ", nn.output.weights[j]);
     }
@@ -71,6 +71,7 @@ void			nn_mutate(NeuralNetwork *nn, float rate)
 	{
 		n_mutate(&nn->hidden[i], rate);
 	}
+	n_mutate(&nn->output, rate);
 }
 
 NeuralNetwork	nn_clone(NeuralNetwork *nn)

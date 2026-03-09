@@ -2,6 +2,11 @@
 #include <stdlib.h>
 
 
+void	obstacle_manager_reset(ObstacleManager *om)
+{
+	obstacle_manager_init(om);
+}
+
 Obstacle* get_nearest_obstacle(ObstacleManager *om, float circleX)
 {
     Obstacle *nearest = NULL;

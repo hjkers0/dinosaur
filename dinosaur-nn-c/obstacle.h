@@ -38,6 +38,8 @@ void	obstacle_draw(Obstacle *o);
 void	obstacle_manager_init(ObstacleManager *om);
 void	obstacle_manager_update(ObstacleManager *om, float deltaTime);
 void	obstacle_manager_draw(ObstacleManager *om);
+void	obstacle_manager_reset(ObstacleManager *om);
+
 
 
 Obstacle* get_nearest_obstacle(ObstacleManager *om, float circleX);
