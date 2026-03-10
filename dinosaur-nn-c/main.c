@@ -3,8 +3,8 @@
 #include "obstacle.h"
 #include <time.h>
 
-#define WIDHT 1920
-#define HEIGHT 1080
+#define WIDHT 1900
+#define HEIGHT 1000
 #define GRAVITY 1.5
 
 typedef struct {
